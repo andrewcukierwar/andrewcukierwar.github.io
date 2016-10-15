@@ -164,6 +164,8 @@ void setup() {
 
 void draw() {
   background(208, 208, 208);
+  textAlign(CENTER, CENTER);
+  text("Hello", width/2, height/2);
   axes();
   draw_lines();
 }
