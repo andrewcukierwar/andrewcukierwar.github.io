@@ -142,7 +142,7 @@ void check_hover() {
 }
 
 void setup() {
-  size(1200, 700);
+  size(800, 500);
   frameRate(10);
   //surface.setResizable(true);
   loadStrings();
