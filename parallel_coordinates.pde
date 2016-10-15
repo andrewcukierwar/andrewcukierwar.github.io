@@ -11,7 +11,7 @@ boolean[] line_hover;
 
 void loadStrings() {
   textAlign(CENTER, CENTER);
-  text("Hello2", width/2, height/2);
+  text("Hello2", width/2, height/3);
   String[] lines = loadStrings(path);
   String[] firstLine = split(lines[0], ",");
   xName = firstLine[0];
@@ -26,12 +26,12 @@ void loadStrings() {
     xNames[i-1] = row[0];
     for (int j = 1; j < firstLine.length; ++j) {
       textAlign(CENTER, CENTER);
-      text("Hello", width/2, height/2);
+      text("Hello", width/2, height/4);
       values[i-1][j-1] = (int)parseFloat(row[j]);
     }
   }
   textAlign(CENTER, CENTER);
-  text("Hello3", width/2, height/2);
+  text("Hello3", width/3, height/3);
 }
 
 int[] getColumn(int[][] array, int index){
