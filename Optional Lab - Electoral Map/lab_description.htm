@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0061)http://classes.engineering.wustl.edu/cse557/electoralmap.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<title>CSE557A</title>
+<link rel="stylesheet" href="./CSE557A_files/main.css">
+
+<style type="text/css">:root #content > #right > .dose > .dosesingle,
+:root #content > #center > .dose > .dosesingle
+{display:none !important;}</style></head>
+
+<body>
+
+<div id="framecontentLeft">
+<div class="innertube">
+
+
+<table class="tg">
+  <tbody><tr> <td>Course Number</td><td>CSE 557A</td> </tr>
+  <tr> <td>Semester</td><td>Fall 2016</td> </tr>
+  <tr> <td>Hours</td><td>MW 4:00-5:30</td> </tr>
+  <tr> <td>Location</td><td><a href="https://www.google.com/maps?q=Lopata+Hall,+Washington+University+in+Saint+Louis@38.649085,-90.306360&amp;hl=en&amp;vpsrc=0&amp;t=m&amp;z=16">Lopata Hall / 202</a></td> </tr>
+  <tr class="blank_row"> <td colspan="2"></td>
+  </tr><tr> <td>Instructor</td><td>Alvitta Ottley</td> </tr>
+  <tr> <td>Email</td><td>alvitta at wustl.edu</td> </tr>
+  <tr> <td>Office</td><td>Jolley 410</td> </tr>
+  <tr> <td>Office Hours</td><td>MW 2:00-4:00</td> </tr>
+  <tr class="blank_row"> <td colspan="2"></td>
+  </tr><tr class="blank_row"> <td colspan="2"></td>
+  </tr><tr class="blank_row"> <td colspan="2"></td>
+</tr></tbody></table>
+
+
+</div>
+</div>
+
+<div id="framecontentTop">
+<div class="innertube">
+
+<h2>CSE 557A: INFORMATION VISUALIZATION</h2>
+
+</div>
+</div>
+
+
+<div id="maincontent">
+<div class="innertube">
+<a href="http://classes.engineering.wustl.edu/cse557/index.html"> &lt;&lt; back</a><br>
+<p><img src="./CSE557A_files/electoralmap.png" width="900"> </p>
+
+<h2 id="description">Description</h2>
+<p> In this OPTIONAL assignment, you will be using d3 to parse the US 2016 election dataset and create a visualization similar to the one above. The chart will show the election result by state and provides geospatial context. You will also implement a tooltip which provides details for a specific state on hover. 
+
+</p><h2>Dataset</h2>
+<a href="http://classes.engineering.wustl.edu/cse557/assignments/election-results.csv">Election Results</a>
+<h2> Implementation </h2>
+<p> Implement a cartogram that communicates the winning percentage of the candidates, but also gives us some geospatial context. In the cartogram, each state is represented by a square of equal size; the squares are placed so that they correspond to their position on a map. By using equal-sized squares, we ensure that all state results are equally readable.</p>
+
+
+<p>How do we lay these tiles out? Assume that you are given a matrix. where each cell corresponds to a tile. Some tiles are filled in (the states), others are not (i.e., remain white). Color-code the states either red or blue based on the winning party for that state, and display the abbreviation of the state and the number of its electoral votes.</p>
+
+<p></p>On hover, display a tool tip having information such as the state name, the number of electoral votes for the state, and also the name of the nominee, number of votes won and vote percentage for each party with respect to a given state, as shown in the screenshot below.<p></p>
+<img src="./CSE557A_files/electoralmap-tooltip" width="300">
+
+<h2>Extra Credit</h2>
+<p> Insead of red/blue, color-code the tiles by win percentage using an appropriate color scale. We will also create a legend associated with the chart, as shown in the screenshot below.</p>
+<img src="./CSE557A_files/electoralmap-legend" width="700">
+
+
+
+<h2>Submission</h2>
+<p> Submit your work via Blackboard by Wednesday December 7, 2016, 11:59pm (midnight). Use the naming convention: “FirstnameLastname_a5”(e.g., AlvittaOttley_a4). </p>
+
+<h2 id="grading-criteria">Grading Criteria</h2>
+<ul>
+<li>5pts: When unzipped, project runs without errors or modifications on my part </li>
+<li>35pts: Map displays data from file, states are acurately positioned and color based on data</li>
+<li>20pts: Hovering Implemented</li>
+</ul>
+
+<h3>Extra Credit</h3>
+<ul><li>20pts: States colored by percentage win and legend present</li></ul>
+
+
+</div>
+</div>
+
+
+
+
+</body></html>

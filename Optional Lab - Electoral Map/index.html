@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title> Presidential Election Results Visualization </title>
+  <style>
+    body {
+      background-color: #D0D0D0;
+      font-size: 12px;
+      color: black;
+      text-anchor: middle;
+    }
+
+    .tooltip { 
+      position: absolute;
+      text-align: center;
+      width: 120px;
+      height: 38px;
+      padding: 3px;
+      font: 8px sans-serif;
+      background: white;
+      border: 2px solid black;
+      border-radius: 8px;
+      pointer-events: none;
+      visibility: hidden;
+    }
+  </style>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+  <script>
+    var height = 400;
+    var width = 840;
+
+    var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip");
+
+    var color = d3.scaleLinear()
+      .domain([-90, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50])
+      .range(["#063E78", "#08519C", "#3182BD", "#6BAED6", "#9ECAE1", "#C6DBEF", "#FCBBA1", "#FC9272", "#FB6A4A", "#DE2D26", "#A50F15", "#860308"]);
+
+    d3.csv("/election-results.csv", function(error, data) {
+      if (error) throw error;
+
+      var dataset = [];
+      for (var i = 0; i < data.length; ++i) {
+        var cur_state = data[i]["State or district"];
+        var cur_method = data[i]["Eectoral Method"];
+        var cur_num_clinton = +data[i]["# Clinton"];
+        var cur_perc_clinton = +data[i]["% Clinton"];
+        var cur_votes_clinton = +data[i]["Electoral Votes Clinton"];
+        var cur_num_trump = +data[i]["# Trump"];
+        var cur_perc_trump = +data[i]["% Trump"];
+        var cur_votes_trump = +data[i]["Electoral Votes Trump"];
+        var cur_abbreviation = data[i]["Abbreviation"];
+        var cur_row = +data[i]["Row"];
+        var cur_col = +data[i]["Col"];
+
+        var tempArray = {state: cur_state, method: cur_method, num_clinton: cur_num_clinton, perc_clinton: cur_perc_clinton, votes_clinton: cur_votes_clinton, num_trump: cur_num_trump, perc_trump: cur_perc_trump, votes_trump: cur_votes_trump, abbreviation: cur_abbreviation, row: cur_row, col: cur_col};
+        dataset.push(tempArray);
+      }
+
+      //Draw rectangles of colors for legend
+      svg.selectAll(".legend_rect")
+          .data(color.domain())
+        .enter().append("rect")
+          .attr("class", "legend_rect")
+          .attr("x", function(d, i) { return width/10 + (width/18)*(i+1); })
+          .attr("y", 10)
+          .attr("width", 45)
+          .attr("height", 10)
+          .style("fill", function(d, i) { return color(d); });
+
+      //Draw labels for those rectangles
+      svg.selectAll(".legend_label")
+          .data(color.domain())
+        .enter().append("text")
+          .attr("class", "legend_label")
+          .attr("x", function(d, i) { return width/10 + (width/18)*(i+1) + 22; })
+          .attr("y", 30)
+          .style("font-size", "10px")
+          .text(function(d, i) {
+            if (d == -90) {
+              return "-90 to -50";
+            }
+            return d + " to " + (d+10);
+          });
+
+      //Draw rectangles for states
+      svg.selectAll(".state")
+          .data(dataset)
+        .enter().append("rect")
+          .attr("class", "state")
+          .attr("id", "mouse")
+          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50; })
+          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30; })
+          .attr("width", 63)
+          .attr("height", 41)
+          .style("fill", function(d) {
+            var margin = 100*(d.perc_trump - d.perc_clinton);
+            var rounded_margin = Math.floor(margin / 10) * 10;
+            return color(rounded_margin);
+          })
+          .on("mouseover", function(d, i) {
+            tooltip.style("visibility", "visible");
+          })
+          .on("mousemove", function(d, i){
+            var mouseX = event.pageX;
+            var mouseY = event.pageY;
+            var state_name = d.state;
+            var total_votes = d.votes_clinton + d.votes_trump;
+            var trump_votes = d.num_trump;
+            var trump_perc = d3.format(".1f")(100 * d.perc_trump) + "%";
+            var hillary_votes = d.num_clinton;
+            var hillary_perc = d3.format(".1f")(100 * d.perc_clinton) + "%";
+            tooltip.style("top", (mouseY - 50)+"px")
+              .style("left",(mouseX)+"px")
+              .html(
+                "<b>" + state_name + "</b> <br>" +
+                "Electoral Votes: " + total_votes + "<br>" +
+                "- Hillary Clinton: " + hillary_votes + "(" + hillary_perc + ")" + "<br>" +
+                "- Donald Trump: " + trump_votes + "(" + trump_perc + ")"
+              );
+          })
+          .on("mouseout", function(d, i) {
+            tooltip.style("visibility", "hidden");
+          });
+
+      //Add state abbreviation to each state rectangle
+      svg.selectAll(".abbreviation")
+          .data(dataset)
+        .enter().append("text")
+          .attr("class", "abbreviation")
+          .attr("id", "mouse")
+          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50 + 31.5; })
+          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30 + 18; })
+          .text(function(d) {
+            return d.abbreviation; 
+          })
+          .on("mouseover", function(d, i) {
+            tooltip.style("visibility", "visible");
+          })
+          .on("mousemove", function(d, i){
+            var mouseX = event.pageX;
+            var mouseY = event.pageY;
+            var state_name = d.state;
+            var total_votes = d.votes_clinton + d.votes_trump;
+            var trump_votes = d.num_trump;
+            var trump_perc = d3.format(".1f")(100 * d.perc_trump) + "%";
+            var hillary_votes = d.num_clinton;
+            var hillary_perc = d3.format(".1f")(100 * d.perc_clinton) + "%";
+            tooltip.style("top", (mouseY - 50)+"px")
+              .style("left",(mouseX)+"px")
+              .html("<b>" + state_name + "</b> <br>" +
+                "Electoral Votes: " + total_votes + "<br>" +
+                "- Hillary Clinton: " + hillary_votes + "(" + hillary_perc + ")" + "<br>" +
+                "- Donald Trump: " + trump_votes + "(" + trump_perc + ")"
+              );
+          })
+          .on("mouseout", function(d, i) {
+            tooltip.style("visibility", "hidden");
+          });
+
+      //Add number of electoral votes to each state rectangle
+      svg.selectAll(".votes")
+          .data(dataset)
+        .enter().append("text")
+          .attr("class", "votes")
+          .attr("id", "mouse")
+          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50 + 31.5; })
+          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30 + 32; })
+          .text(function(d) { 
+            var total_votes = d.votes_clinton + d.votes_trump;
+            return total_votes; 
+          })
+          .on("mouseover", function(d, i) {
+            tooltip.style("visibility", "visible");
+          })
+          .on("mousemove", function(d, i){
+            var mouseX = event.pageX;
+            var mouseY = event.pageY;
+            var state_name = d.state;
+            var total_votes = d.votes_clinton + d.votes_trump;
+            var trump_votes = d.num_trump;
+            var trump_perc = d3.format(".1f")(100 * d.perc_trump) + "%";
+            var hillary_votes = d.num_clinton;
+            var hillary_perc = d3.format(".1f")(100 * d.perc_clinton) + "%";
+            tooltip.style("top", (mouseY - 50)+"px")
+              .style("left",(mouseX)+"px")
+              .html("<b>" + state_name + "</b> <br>" +
+                "Electoral Votes: " + total_votes + "<br>" +
+                "- Hillary Clinton: " + hillary_votes + "(" + hillary_perc + ")" + "<br>" +
+                "- Donald Trump: " + trump_votes + "(" + trump_perc + ")"
+              );
+          })
+          .on("mouseout", function(d, i) {
+            tooltip.style("visibility", "hidden");
+          });
+    });
+  </script>
+</body>
+</html>
