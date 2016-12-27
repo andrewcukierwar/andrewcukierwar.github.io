@@ -10,7 +10,7 @@
 var height = 500;
 var width = 1250;
 //load the data into a different array format from the recommended one because area function was not properly able to access the values from the recommended one.
-d3.text("/data2.csv")
+d3.text("/ThemeRiver/data2.csv")
   .get(function(error, rows) {
     var parsedRows = d3.csv.parseRows(rows);
     var headers = [];
