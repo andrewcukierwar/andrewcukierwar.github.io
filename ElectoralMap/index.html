@@ -6,7 +6,7 @@
   <style>
     body {
       background-color: #D0D0D0;
-      font-size: 12px;
+      font-size: 18px;
       color: black;
       text-anchor: middle;
     }
@@ -14,13 +14,13 @@
     .tooltip { 
       position: absolute;
       text-align: center;
-      width: 120px;
-      height: 38px;
-      padding: 3px;
-      font: 8px sans-serif;
+      width: 180px;
+      height: 57px;
+      padding: 4.5px;
+      font: 12px sans-serif;
       background: white;
-      border: 2px solid black;
-      border-radius: 8px;
+      border: 3px solid black;
+      border-radius: 12px;
       pointer-events: none;
       visibility: hidden;
     }
@@ -29,8 +29,10 @@
 </head>
 <body>
   <script>
-    var height = 400;
-    var width = 840;
+    // var height = 400;
+    // var width = 840;
+    var height = 600;
+    var width = 1260;
 
     var svg = d3.select("body").append("svg")
       .attr("width", width)
@@ -70,9 +72,9 @@
         .enter().append("rect")
           .attr("class", "legend_rect")
           .attr("x", function(d, i) { return width/10 + (width/18)*(i+1); })
-          .attr("y", 10)
-          .attr("width", 45)
-          .attr("height", 10)
+          .attr("y", 15)
+          .attr("width", 67.5)
+          .attr("height", 15)
           .style("fill", function(d, i) { return color(d); });
 
       //Draw labels for those rectangles
@@ -80,9 +82,9 @@
           .data(color.domain())
         .enter().append("text")
           .attr("class", "legend_label")
-          .attr("x", function(d, i) { return width/10 + (width/18)*(i+1) + 22; })
-          .attr("y", 30)
-          .style("font-size", "10px")
+          .attr("x", function(d, i) { return width/10 + (width/18)*(i+1) + 33; })
+          .attr("y", 45)
+          .style("font-size", "15px")
           .text(function(d, i) {
             if (d == -90) {
               return "-90 to -50";
@@ -96,10 +98,10 @@
         .enter().append("rect")
           .attr("class", "state")
           .attr("id", "mouse")
-          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50; })
-          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30; })
-          .attr("width", 63)
-          .attr("height", 41)
+          .attr("x", function(d) { return (width-75)*(1 + d.col)/12 - 75; })
+          .attr("y", function(d) { return (height-75)*(1 + d.row)/8 - 45; })
+          .attr("width", 94.5)
+          .attr("height", 61.5)
           .style("fill", function(d) {
             var margin = 100*(d.perc_trump - d.perc_clinton);
             var rounded_margin = Math.floor(margin / 10) * 10;
@@ -117,7 +119,7 @@
             var trump_perc = d3.format(".1f")(100 * d.perc_trump) + "%";
             var hillary_votes = d.num_clinton;
             var hillary_perc = d3.format(".1f")(100 * d.perc_clinton) + "%";
-            tooltip.style("top", (mouseY - 50)+"px")
+            tooltip.style("top", (mouseY - 75)+"px")
               .style("left",(mouseX)+"px")
               .html(
                 "<b>" + state_name + "</b> <br>" +
@@ -136,8 +138,8 @@
         .enter().append("text")
           .attr("class", "abbreviation")
           .attr("id", "mouse")
-          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50 + 31.5; })
-          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30 + 18; })
+          .attr("x", function(d) { return (width-75)*(1 + d.col)/12 - 28; })
+          .attr("y", function(d) { return (height-75)*(1 + d.row)/8 - 18; })
           .text(function(d) {
             return d.abbreviation; 
           })
@@ -153,7 +155,7 @@
             var trump_perc = d3.format(".1f")(100 * d.perc_trump) + "%";
             var hillary_votes = d.num_clinton;
             var hillary_perc = d3.format(".1f")(100 * d.perc_clinton) + "%";
-            tooltip.style("top", (mouseY - 50)+"px")
+            tooltip.style("top", (mouseY - 75)+"px")
               .style("left",(mouseX)+"px")
               .html("<b>" + state_name + "</b> <br>" +
                 "Electoral Votes: " + total_votes + "<br>" +
@@ -171,8 +173,8 @@
         .enter().append("text")
           .attr("class", "votes")
           .attr("id", "mouse")
-          .attr("x", function(d) { return (width-50)*(1 + d.col)/12 - 50 + 31.5; })
-          .attr("y", function(d) { return (height-50)*(1 + d.row)/8 - 30 + 32; })
+          .attr("x", function(d) { return (width-75)*(1 + d.col)/12 - 28; })
+          .attr("y", function(d) { return (height-75)*(1 + d.row)/8 + 3; })
           .text(function(d) { 
             var total_votes = d.votes_clinton + d.votes_trump;
             return total_votes; 
