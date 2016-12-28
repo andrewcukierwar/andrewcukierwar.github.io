@@ -4,10 +4,15 @@
   <meta charset="utf-8">
   <title>ThemeRiver</title>
   <script src="//d3js.org/d3.v3.js"></script>
+  <style>
+      body {
+          background-color: #30d5c8;
+      }
+  </style>
 </head>
 <body>
 <script>
-var height = 500;
+var height = 550;
 var width = 1250;
 //load the data into a different array format from the recommended one because area function was not properly able to access the values from the recommended one.
 d3.text("/ThemeRiver/data2.csv")
@@ -55,12 +60,13 @@ var xMax = d3.max(layers, function(d) { return d3.max(d, function(d) { return d.
 var yMax = d3.max(layers, function(d) { return d3.max(d, function(d) { return d.y0 + d.y; });});
 var x = d3.scale.linear()
     .domain([xMin, xMax])
-    .range([0, width]);
+    .range([30, width-30]);
 var y = d3.scale.linear()
     .domain([0, yMax])
-    .range([height-30, 0]);
-var color = d3.scale.linear()
-    .range(["#30d5c8", "#add8e6"]);
+    .range([height-40, 10]);
+// var color = d3.scale.linear()
+//     .range(["#30d5c8", "#add8e6"]);
+var color = d3.scale.category10();
 // Create area graph
 var area = d3.svg.area()
     .interpolate("cardinal")
@@ -95,8 +101,9 @@ svg.selectAll("path")
           }
         }
         var toDisplay = "(" + layers[i][0].name + ", " + headers[closest_index] + ", " + layers[i][closest_index].y + ")";
-        return display.style("top", (mouseY-10)+"px")
-            .style("left",(mouseX+10)+"px")
+        return display.style("top", (mouseY-23)+"px")
+            .style("left",(mouseX)+"px")
+            .style("font-weight", "bold")
             .text(toDisplay);
     })
     .on("mouseout", function(){
@@ -104,7 +111,8 @@ svg.selectAll("path")
     });
 // Add x-axis
 var xAxis = d3.svg.axis()
-    .scale(x);
+    .scale(x)
+    .tickFormat(d3.format("d"));
 svg.append("g")
     .attr("transform", "translate(0," + 19/20*height + ")")
     .call(xAxis);
