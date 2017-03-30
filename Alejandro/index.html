@@ -10,13 +10,10 @@
     		font-size: 40px;
     	}
     	#button {
-		    background-color: blue; /* Green */
+		    background-color: blue;
 		    border: 5px dotted white;
 		    color: white;
 		    padding: 10px 20px;
-		    text-align: center;
-		    text-decoration: none;
-		    display: inline-block;
 		    font-size: 24px;
 		}
 		#result {
@@ -29,12 +26,9 @@
     <button id="button">Click to Find Out!</button><br><br>
     <div id="result"></div>
     <script>
-    	document.addEventListener("DOMContentLoaded", function(){
-	    	$("#button").click(function() {
-	    		$("#result").html("Yes!");
-	    	});
-		}, false);
+    	$("#button").click(function() {
+    		$("#result").html("Yes!");
+    	});
     </script>
 </body>
-
 </html>
