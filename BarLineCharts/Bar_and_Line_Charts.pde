@@ -154,7 +154,7 @@ void drawBox() {
 }
 
 void setup() {
-  size(1000, 600);
+  size(1200, 620);
   // surface.setResizable(true);
   loadStr();
   bar = true;
