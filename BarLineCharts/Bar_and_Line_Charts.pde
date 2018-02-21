@@ -6,7 +6,7 @@ int[] values;
 boolean bar;
 int yAxisMax;
 
-void loadStrings() {
+void loadStr() {
   String[] lines = loadStrings(path);
   String[] firstLine = split(lines[0], ",");
   xName = firstLine[0];
@@ -156,7 +156,7 @@ void drawBox() {
 void setup() {
   size(800, 480);
   // surface.setResizable(true);
-  loadStrings();
+  loadStr();
   bar = true;
 }
 
