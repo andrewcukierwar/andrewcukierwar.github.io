@@ -188,7 +188,10 @@ void setup() {
   year = 2009; //initial year to start at, doesn't really matter which
   year_values = new float[12]; //initialize year_values
   int start = (year - 2009)*12; //calculate start index in full value array
-  System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+  //System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+  for (int i = 0; i < year_values.length; ++i) {
+    year_values[i] = values[start + i];
+  }
   word_cloud = false;
   cloud_month_index = 0;
   hover_word = "";
@@ -219,7 +222,10 @@ void mouseClicked() {
     if (mouseX >= lowerX && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY && year > 2009) {
       --year; //decrement year
       int start = (year - 2009)*12; //recalculate start index in full value array
-      System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+      // System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+      for (int i = 0; i < year_values.length; ++i) {
+        year_values[i] = values[start + i];
+      }
     }
 
     //Check if -> button clicked
@@ -228,7 +234,10 @@ void mouseClicked() {
     if (mouseX >= lowerX && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY && year < 2015) {
       ++year; //increment year
       int start = (year - 2009)*12; //recalculate start index in full value array
-      System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+      // System.arraycopy(values, start, year_values, 0, 12); //copy values from that year into year_values array
+      for (int i = 0; i < year_values.length; ++i) {
+        year_values[i] = values[start + i];
+      }
     }
 
     //Check if circle clicked
