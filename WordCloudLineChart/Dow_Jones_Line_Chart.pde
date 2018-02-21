@@ -182,7 +182,7 @@ void mouseHover() {
 }
 
 void setup() {
-  size(1250, 700);
+  size(1200, 620);
   // surface.setResizable(true); //allow surface to be resizable
   loadStr(); //load data from csv into arrays
   year = 2009; //initial year to start at, doesn't really matter which
