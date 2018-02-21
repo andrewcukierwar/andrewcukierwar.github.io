@@ -147,7 +147,7 @@ void check_hover() {
 void setup() {
   size(1200, 700);
   frameRate(10);
-  surface.setResizable(true);
+  // surface.setResizable(true);
   loadStr();
   flips = new boolean[values[0].length];
   for (int i = 0; i < flips.length; ++i) {
