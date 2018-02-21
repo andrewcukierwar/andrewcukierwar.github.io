@@ -1,0 +1,168 @@
+CSE 332 Lab 3: Five Card Draw
+
+Due by Tuesday November 22nd at 11:59 pm
+Final grade percentage: 12 percent
+
+Objective:
+
+This lab is intended to extend your use of C++ language features from the previous labs, and to make more extensive use of C++11 and STL features. To do this, you will extend your C++ programs from the previous labs to (1) maintain and display the status of a multi-player game of 5 card draw poker; (2) parse command-line arguments to identify the initial players in the game; (3) within each round of play allow players to discard cards from and add cards to their hands, and print out a ranking of the resulting hands; and (4) between rounds allow current players to leave the game and new players to enter the game, saving information for players who leave in files so that if they re-join the game later the files can be used to restore their statistics from previous rounds of play.
+Both for this lab and for the next one, your are allowed (and encouraged) to work in teams of 2 or 3 people (but not more), though you also are allowed to complete the lab assignment individually if you prefer. If you do work in a team, you are allowed to use any of your team members' code from the previous lab assignments in this course this semester, in your solution for this lab.
+
+In this lab and in the subsequent labs, you are encouraged to re-use and modify code from your previous lab solutions - if you choose do this, please put a completely new copy of any header and source files from your previous lab(s) in the new lab project directory you create. This can avoid some potential for error or confusion within Visual Studio, and also ensures you have a backup copy that you could go back to if a modification you try doesn't pan out.
+
+In the next (final) lab assignment for this course you will build on these features to allow a user to choose among different card games to play.
+
+Assignment:
+
+Part I - Readings:
+
+The following readings in the course text book may be useful as reference material while working on this lab assignment.
+C++ classes: LLM Chapters 7 and 15 (through 15.6)
+STL algorithms: LLM Chapter 10
+C++ dynamic memory management: LLM Chapter 12
+Please read the following CSE 332 Programming Guidelines which relevant to the previous labs and please follow them as you implement your solution: A.1-A.17, B.1, B.2, B.10-B.13, B.15-B.18, B.20-B.25, B.28, B.29, B.31-B.33, and C.1-C.8.
+Please also review and follow these additional guidelines that may be relevant to this lab: B.3-B.8, B.19, B.26, B.27, and B.34 (pointers, smart pointers, and dynamic memory allocation); B.9 (virtual destructor); and B.14 (static variables).
+
+Part II - Program Design and Implementation:
+
+Note: the details of this assignment are again intentionally somewhat under-specified, leaving you some room to choose what you think is the best way to implement them, as long as what you do is reasonable and you explain your design decisions in comments in the code and in your ReadMe.txt file.
+
+Please also note that in this lab assignment and the next one, you are strongly encouraged to use smart pointers (especially shared_ptrs) and their corresponding dynamic allocation functions (e.g., make_shared), instead of using native C++ pointers with the new and delete operators: this more modern style of dynamic memory management can save you significant problems (and with them deductions when we grade your lab solution) due to memory leaks, double deletion, and other issues.
+
+Open up Visual Studio, and create a new Win32 Console Application Visual C++ project for lab 3. Copy the files from your lab 2 implementation over to this project as you will be extending them in this lab assignment (though you will replace your main function from lab 2 with the one specified below for this lab).
+Extend the Deck class from your previous lab implementation with:
+A default constructor that initializes the deck object to be empty.
+
+An add_card method that takes a Card as its only parameter, and adds it to the deck.
+
+Extend the Hand class from your previous lab implementation with:
+An indexing operator (operator[]) that takes a variable of type size_t as its only parameter, and returns the card object at that position in the hand. If there is no card at the position given (i.e., the position is greater than or equal to the number of elements in the vector) the operator should throw an exception.
+
+A remove_card method that takes a size_t variable as its only parameter. If there is a card at that position in the hand object's vector of cards, the method should remove the card at that position of the vector (the remaining cards should be in the same relative order they were before the method was called). If there is no card at the position given (i.e., the position is greater than or equal to the number of elements in the vector) the method should throw an exception.
+
+Hint: the STL vector erase method can be useful to implement this method, but please be aware that the erasure may invalidate iterators over that vector (so that they may need to be re-positioned within the vector after each such an erasure).
+
+Create a new header and source file for a Player struct, and in them declare and define (respectively) the following elements of that struct:
+A C++ style string for the player's name.
+
+A Hand for the player's cards.
+
+Unsigned integer variables for the number of hands won and lost (respectively) by the player.
+
+A constructor that takes a C-style string as its only parameter, uses that parameter to initializes its name member variable, and initializes its wins and losses member variables both to 0 (the hand member variable should be default constructed to be empty).
+
+The body of the constructor should try to open a file that has the same name as the player, and if successful should read the name, wins, and losses values from it and assign those values to the appropriate member variables of the struct (if the file cannot be opened the constructor should simply finish execution leaving the member variables in the states set up by the base/member initialization list). If the file cannot be opened, or if both values cannot be extracted from it, then both wins and losses should be (re-)set to 0.
+
+Please also declare and define a non-member insertion operator (operator<<) that takes a reference to an ostream and a reference to a const Player. That operator should use the ostream to print out the player's name, number of wins, and number of losses with spaces between them and then return a reference to the ostream.
+
+Create a new header and source file for a Game abstract base class, and in them declare and define (respectively) the following elements of that class:
+A protected static member variable that is a pointer (or even better a shared_ptr) to Game. That pointer should be initialized to be singular (point to nothing).
+
+A protected (non-static) Deck member variable (that is default constructed to be empty) that will be used as the main deck of cards in the game (the rest of this specification will refer to this member variable as the "main deck").
+
+A protected (non-static) vector (that is initially empty) of pointers (or even better, of shared_ptrs) to players.
+
+A public static instance method that takes no parameters and returns a copy of the static pointer member variable. If the static pointer member variable is singular (points to nothing), the method should throw an instance_not_available exception (how you define this exception is up to you).
+
+A public static start_game method that has a void return type and takes a reference to a const C++ style string as its only parameter. If the static pointer member variable is non-singular (points to something) the method should throw a game_already_started exception (how you define your exceptions is again up to you). If the C++ style string parameter does not contain "FiveCardDraw" the method should throw an unknown_game exception. Otherwise the method should dynamically allocate an instance of the FiveCardDraw class (to be described below) and store its address in the static pointer member variable: if you use a shared_ptr (which is preferred) instead of a native C++ pointer, then you would use make_shared instead of new.
+
+A public static stop_game method that takes no parameters and has a void return type. If the static pointer member variable is singular the method should throw a no_game_in_progress exception. If (and only if - do not do this if it is a shared_ptr) the static pointer member variable is a native C++ pointer (e.g., of type Game *) the method should call delete on the static pointer member variable. Finally, the method should set the static pointer member variable to be singular.
+
+A public (non-static) add_player method that takes a reference to a const C++ style string as its only parameter. If there is already a player in the game whose name is the same as the passed C++ style string, the method should throw an already_playing exception. Otherwise the method should dynamically allocate a Player with that name, and then push a pointer (or shared_ptr) to the object back into the game's vector of pointers to players.
+
+A public (non-static) find_player method that takes a reference to a const C++ style string as its only parameter, and either returns a pointer (or shared_ptr) to the matching Player object or returns a singular pointer (or shared_ptr) if there is no player in the game with that name.
+
+A public virtual destructor. If (and only if - do not do this if the vector contains shared_ptrs) the vector contains native C++ pointers (e.g., of type Player *), the destructor should iterate through the vector of pointers to players and call delete on each one.
+
+A declaration of a public pure virtual before_turn method that takes a reference to a Player and returns an int.
+
+A declaration of a public pure virtual turn method that takes a reference to a Player and returns an int.
+
+A declaration of a public pure virtual after_turn method that takes a reference to a Player and returns an int.
+
+A declaration of a public pure virtual before_round method that takes no parameters and returns an int.
+
+A declaration of a public pure virtual round method that takes no parameters and returns an int.
+
+A declaration of a public pure virtual after_round method that takes no parameters and returns an int.
+
+Create a new header and source file for a FiveCardDraw class that is derived through public inheritance from the Game abstract base class, and in them declare and define (respectively) the following elements of that class:
+A protected member variable of type size_t that indicates which player is currently in the "dealer" position of the game (which should start at 0 and rotate among the player positions during the game).
+
+A protected Deck member variable (that is default constructed to be empty) that will be used to store cards discarded during the game (the rest of this specification will refer to this member variable as the "discard deck").
+
+A public default constructor that only initializes the dealer position member variable to be 0 (so that both its base class and its discard deck member variable are default constructed), and then iterates through all of the 52 valid combinations of suit and rank as defined in the Card class enumerations and passes a Card corresponding to each combination into a call to the add_card method of the main deck member variable that was inherited from the Game base class.
+
+A public virtual before_turn method that takes a reference to a Player and returns an int. The method should print out the player's name and the contents of their hand, then use cout to print out a prompt asking the user which (if any) of their cards to discard, and then use cin (and possibly a string stream) to obtain a response containing valid size_t values for the positions of the cards to discard from the hand.
+
+Note that this implementation should allow the user to discard either no cards, all their cards, or any 1, 2, 3, or 4 of their cards. If the user gives an invalid response (for example with more cards than there are in the hand or a card position that is not in the hand) the method should simply continue to re-prompt the user for a valid response until one is obtained.
+
+The method should call the discard deck's add_card method to add each of those discarded cards to it, call the player's hand object's remove_card method to remove those cards, and then return 0 to indicate success.
+
+A public virtual turn method that takes a reference to a Player and returns an int. The method should deal the player's hand as many cards from the main deck as the player had discarded (so that the player again ends up with 5 cards in their hand).
+
+If the deck is (or becomes) empty, the discard deck should be shuffled and any remaining replacement cards should be dealt to the player's hand from the discard deck instead. If there are not enough cards left in the main or discard decks to replace the player's discarded cards, the method should return a non-zero value to indicate failure: otherwise the method should return 0 to indicate success.
+
+A public virtual after_turn method that takes a reference to a Player and returns an int. The method should print out the player's name and the contents of their hand (thus showing the result after their discarded cards were replaced), and return 0 to indicate success.
+
+A public virtual before_round method that takes no parameters and returns an int. This method should call the main deck member variable's shuffle method and then starting with the player just past the position indicated by the dealer member variable (or, if the player in the last position is the dealer, starting at position 0), deal one card at a time from the main deck to each player, continuing to iterate through the players until each player has received five cards.
+
+The method should then iterate once more through the players (again starting just past the dealer modulo the number of players) and at each player call their before_turn method, and then return 0 to indicate success.
+
+A public virtual round method that takes no parameters and returns an int. The method should iterate once more through the players (again starting with the one just past the dealer), and at each player calling their turn method and then their after_turn method. If any player's turn method returns a non-zero value, the method should immediately return that non-zero value; otherwise if it completes with no problems the method should return 0 to indicate success.
+
+A public virtual after_round method that takes no parameters and returns an int. This method should perform the following actions (implementing additional non-member or protected member functions for some or all of these in your FiveCardDraw class is a good idea, to produce a modular design and implementation of your lab solution):
+
+Sort a temporary vector of pointers to players (a copy of the vector member variable) according to the ranking of their hands by the poker_rank function specification from the previous lab. Hint: an easy way to do this is to declare and define an overloaded poker_rank non-member function that takes two pointers to players, returns false if the first pointer is singular, if it is non-singular returns true if the second pointer is singular, and otherwise returns the result of calling the original poker_rank function with their hands.
+
+For the player with the highest hand (or players if multiple equivalent hands were highest) increment their number of wins. For all other players, increment their number of losses.
+
+Use the sorted temporary vector to print out a listing with each player's name, numbers of wins and losses, and then current hand, in order from the player with the highest hand to the player with the lowest hand.
+
+Move all cards from the players hands and from the discard deck into the main deck so that the main deck has all 52 cards and the hands and discard deck are all empty.
+
+Until the user says no, repeatedly ask whether any players want to leave the game: if so get the names of the players (ignore any invalid player names but continue to process valid ones) and for each one (1) find the player; (2) open an ofstream using the player's name as the file name, insert the player into the ofstream, and close the ofstream; and (3) erase the player's pointer from the vector of pointers to players (being careful to avoid problems with erase invalidating iterators as noted elsewhere in the assignent). If (and only if) you used native C++ pointers (instead of shared_ptrs), then between steps (2) and (3) you also must call delete on the player's address, but you should *not* do that if you used shared_ptrs since they will take care of the deletion themselves, through reference counting.
+
+Until the user says no, repeatedly ask whether any players want to join the game: if so get the names of those players and for each one call the add_player method. If an exception is thrown because the player is already in the game, just catch the exception and continue to process other player names.
+
+After it has performed each of these actions successfully, the method should increment the dealer member variable to the next player position (or to 0 if the dealer variable is greater than or equal to the last player position), and then return 0 to indicate success.
+
+In your project's main function:
+Make sure that there are at least 3 arguments to the program, in addition to the program name: if not, the program should print out a usage message that says the program should be run with the name of a game followed by the names of two or more players, and return a non-zero integer value to indicate failure.
+
+Otherwise, the main function should call the Game class' static start_game method with the first argument after the program name, and then call the Game class' static instance method to obtain a pointer (or shared_ptr) to the game object.
+
+While there are still at least two players in the game, the main function should repeatedly call the game object's before_round, round, and after_round methods.
+
+The main function should catch any exceptions and note any non-zero return values from the called functions, and if so should call the Game class' static stop_game method and return an appropriate non-zero value to indicate failure; otherwise, if the program detects that there are no more players in the game it should call the Game class' static stop_game method and return 0 to indicate success.
+
+Build your project, and fix any errors or warnings that occur. Please be sure to note all of the different kinds of errors or warnings you ran into (though you don't have to list every instance of each kind) in your ReadMe.txt file. If you were fortunate enough not to run into any errors or warnings, please note that instead, where you would have listed errors or warnings in your ReadMe.txt file.
+Open up a Windows console (terminal) window and change to the directory where your program's executable file was created by Visual Studio.
+Run the executable program through a series of trials that test it with good coverage of cases involving both well formed and badly formed inputs. In your ReadMe.txt file please document which cases you ran (i.e., what the command lines were) and summarize what your program did and whether that is correct behavior, in each case.
+In your ReadMe.txt file, make sure that your name and the lab number (lab 3) are at the top of the file, and that you've documented whether you ran into any errors or warnings while developing your solution (and if so what they were) and what the executable program did for each of the trials you ran. Be sure to save your changes to your ReadMe.txt file, as well as those to your source (and header) file(s) before preparing your solution zip file.
+Prepare a zip file that contains your project's source, header, and ReadMe.txt files (except for executable files, or stdafx.h, stdafx.cpp or other Windows-generated files you did not modify), by:
+Creating a new lab3 folder on your Windows desktop;
+Copying the appropriate files (here, ReadMe.txt, and the source and header files where you wrote your code) into that folder; and then
+Right-clicking on the folder and selecting the Send To->Compressed (zipped) Folder item in the menu that appears.
+Send the zip file containing your lab 3 solution as an e-mail attachment to the course e-mail account (cse332@seas.wustl.edu) by the submission deadline for this assignment. If you need to make changes to your lab solution you are welcome to send a new zip file, and we will grade the latest one received prior to the deadline (according to the receipt time stamp the server puts on the e-mail).
+
+Part III - Automated players: (optional, worth up to 5% extra credit)
+
+The goal of this optional part of the assignment is to have the program to play automatically for some of the players, instead of consulting the user for how to play their hands:
+Allow an asterisk (a * character) to be appended as the last character of any input string that represents a player's name (either one that starts in the game or joins the game later after a round), and have the program play for such players automatically. This means that wherever the program would have obtained user input, it should instead compute and then use an input on its own. For example, "Doyle" would be a user-played player, while the program should play automatically for "Doyle*". To make this easier to implement you could reasonably restrict names to have only alphabetic characters other than the optional terminal asterisk, though it's up to you whether or not to impose such restrictions (please document any restrictions you do impose in your readme file and in comments in your code).
+The Player class constructor and destructor should treat the characters up to but not including the terminal asterisk character of any automatic player's name, as the name of the file to try to open for input or output respectively. This allows automatic and/or user-driven versions of the same player to be used sequentially.
+After the initial hand of a round is dealt to a player, the game should discard (and then deal replacement cards from the deck) for each automatic player, as follows:
+straight flush, full house, straight, or flush: do not discard or receive any cards;
+four of a kind or two pair: discard the unmatched card and receive one more card;
+three of a kind: discard the two unmatched cards and receive two more cards;
+one pair: discard the three unmatched cards and receive three more cards;
+no rank: if the hand has an ace, discard the other four cards and receive four more cards; otherwise, keep the two highest cards, discard the other three, and receive three more cards.
+After each round, choose whether each automatic player will stay in the game or quit, as follows:
+An automatic player that had the highest hand in the last round will stay in the game with 90 percent probability;
+An automatic player that had neither the lowest nor highest hand in the last round will stay in the game with 50 percent probability;
+An automatic player that had the lowest hand in the last round will stay in the game with 10 percent probability;
+The program should compute an unsigned integer randomly distributed between 0 and 100: if the unsigned integer is less than or equal to the player's probability of remaining in the game the player should stay, and otherwise the player should quit the game.
+
+In your readme file, please add a section clearly marked "Extra Credit" and in it explain how you implemented those features, and also cut and paste output from your game with it showing examples of it making different choices for players discarding cards, remaining in the game, and leaving the game.
+Posted 4:00pm Tuesday March 10 2015 by
+Chris Gill
