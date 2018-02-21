@@ -145,7 +145,7 @@ void check_hover() {
 }
 
 void setup() {
-  size(1200, 640);
+  size(1200, 620);
   frameRate(10);
   // surface.setResizable(true);
   loadStr();
