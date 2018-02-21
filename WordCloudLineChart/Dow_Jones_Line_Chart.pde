@@ -145,7 +145,7 @@ void lineChart() {
   }
 }
 
-void word_cloud() {
+void create_word_cloud() {
   String month = months[cloud_month_index]; //store month of cloud clicked
   String pic_file_name = "cloud/" + year + month + ".png"; //get proper format of text file name
   PImage img = loadImage(pic_file_name);
@@ -202,7 +202,7 @@ void draw() {
     mouseHover();
   } 
   else {
-    word_cloud();
+    create_word_cloud();
   }
 }
 
