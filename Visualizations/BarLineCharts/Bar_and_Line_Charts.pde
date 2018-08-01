@@ -1,4 +1,4 @@
-String path = "data.csv";
+String path = "Visualizations/BarLineCharts/data.csv";
 String xName = "";
 String yName = "";
 String[] names;
@@ -31,7 +31,7 @@ void axes() {
   for (int i = 1; i <= 6; ++i) {
     line(width/8, i*height/8, width/8 - width/100, i*height/8); //y-axis tick marks
     String axisLabel = "" + (i*yAxisMax/6.0);
-    textSize(width/100);
+    textSize(13*width/1000);
     textAlign(RIGHT, CENTER);
     text(axisLabel, width/8 - width/50, (7-i)*height/8);
   }
@@ -41,13 +41,13 @@ void axes() {
   pushMatrix();
   translate(width/20, height/2);
   rotate(-1*PI/2);
-  textSize(16*height/600);
+  textSize(18*height/600);
   textAlign(CENTER);
   text(yName, 0, 0);
   popMatrix();
   
   //x-axis name
-  textSize(16*width/1000);
+  textSize(18*width/1000);
   textAlign(CENTER);
   text(xName, width/2, height*49/50);
   fill(0, 0, 0);
@@ -63,7 +63,7 @@ void axes() {
     pushMatrix();
     translate(x, 7*height/8 + height/50); // FIX
     rotate(-1*PI/2);
-    textSize(height/60);
+    textSize(11*height/600);
     textAlign(RIGHT, CENTER);
     text(name, 0, 0);
     popMatrix();
@@ -95,7 +95,7 @@ void barMouseHover() {
       rectMode(CENTER);
       fill(0, 0, 0);
       rect(curX, halfY, colWidth, colHeight);
-      textSize(9);
+      textSize(12);
       textAlign(CENTER, BOTTOM);
       text(tooltip, curX, 7*height/8 - colHeight - height/100);
       fill(255, 255, 255);
@@ -130,7 +130,7 @@ void lineMouseHover() {
     String tooltip = "(" + name + ", " + value + ")";
     if (mouseX >= (curX-3) && mouseX <= (curX+3) && mouseY >= (curY-3) && mouseY <= (curY+3)) {
       fill(0, 0, 0);
-      textSize(9);
+      textSize(12);
       textAlign(CENTER, BOTTOM);
       text(tooltip, curX, curY - height/100);
       fill(255, 255, 255);
@@ -144,7 +144,7 @@ void drawBox() {
   rect(7*width/8, height/16, width/8, height/32);
   fill(255, 255, 255);
   textAlign(CENTER, CENTER);
-  textSize(12*width/1000);
+  textSize(14*width/1000);
   if (bar) {
     text("Change to Line", 7*width/8, height/16);
   }
@@ -154,7 +154,7 @@ void drawBox() {
 }
 
 void setup() {
-  size(1200, 620);
+  size(910, 580);
   // surface.setResizable(true);
   loadStr();
   bar = true;

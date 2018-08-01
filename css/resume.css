@@ -148,3 +148,33 @@ a {
 a:hover, a:focus, a:active {
   color: #824027;
 }
+
+canvas{
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  display: block;
+}
+
+/*#visualizations {
+  background-color: #D0D0D0 !important;
+}*/
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 180px;
+  height: 57px;
+  padding: 4.5px;
+  font: 12px sans-serif;
+  background: white;
+  border: 3px solid black;
+  border-radius: 12px;
+  pointer-events: none;
+  visibility: hidden;
+}

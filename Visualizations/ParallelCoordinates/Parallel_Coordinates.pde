@@ -1,4 +1,4 @@
-String path = "data.csv";
+String path = "Visualizations/ParallelCoordinates/data.csv";
 String xName = "";
 String[] yNames;
 String[] xNames;
@@ -54,7 +54,7 @@ void axes() {
     axes_mins[i] = axis_min;
     
     fill(255, 255, 255);
-    textSize(height*width/60000);
+    textSize(width/70);
     textAlign(CENTER, BOTTOM);
     if (!flips[i]) {  text(axis_max, width/8+part*width*3/4, height/8);  }
     else {  text(axis_min, width/8+part*width*3/4, height/8);  }
@@ -145,7 +145,7 @@ void check_hover() {
 }
 
 void setup() {
-  size(1200, 620);
+  size(910, 580);
   frameRate(10);
   // surface.setResizable(true);
   loadStr();
