@@ -21,7 +21,8 @@ void loadStr() {
 }
 
 void axes() {
-  stroke(255, 255, 255);
+  // stroke(255, 255, 255);
+  stroke(0, 0, 0);
   line(width/8, 7*height/8, width/8, height/8);
   line(width/8, 7*height/8, 7*width/8, 7*height/8);
   int yMax = max(values);
@@ -75,7 +76,8 @@ void barChart() {
     int curX = width/8 + (int)(1.0*(i+1)/values.length*(23*width/32));
     int curValue = values[i];
     int halfY = (7*height/8) - (int)(((1.0)*curValue/yAxisMax)*(3*height/4)/2);
-    fill(57, 180, 189);
+    // fill(57, 180, 189);
+    fill(0, 46, 102);
     rectMode(CENTER);
     rect(curX, halfY, (int)(1.0/values.length*(23*width/32)/2), (int)(((1.0)*curValue/yAxisMax)*(3*height/4)));
   }
@@ -98,12 +100,15 @@ void barMouseHover() {
       textSize(12);
       textAlign(CENTER, BOTTOM);
       text(tooltip, curX, 7*height/8 - colHeight - height/100);
-      fill(255, 255, 255);
+      // fill(255, 255, 255);
     }
   }
 }
 
 void lineChart() {
+  // fill(0,0,0);
+  // fill(255, 255, 255);
+  fill(208, 208, 208);
   for (int i = 0; i < values.length; ++i) {
     int curX = width/8 + (int)(1.0*(i+1)/values.length*(23*width/32));
     int curValue = values[i];
@@ -112,9 +117,11 @@ void lineChart() {
       int nextX = width/8 + (int)(1.0*(i+2)/values.length*(23*width/32));
       int nextValue = values[i+1];
       int nextY = (7*height/8) - (int)(((1.0)*nextValue/yAxisMax)*(3*height/4));
-      stroke(57, 180, 189);
+      // stroke(57, 180, 189);
+      stroke(0, 46, 102);
       line(curX, curY, nextX, nextY);
-      stroke(255, 255, 255);
+      stroke(0, 0, 0);
+      // stroke(208, 208, 208);
     }
     ellipse(curX, curY, 6, 6);
   }
@@ -133,13 +140,14 @@ void lineMouseHover() {
       textSize(12);
       textAlign(CENTER, BOTTOM);
       text(tooltip, curX, curY - height/100);
-      fill(255, 255, 255);
+      // fill(255, 255, 255);
     }
   }
 }
 
 void drawBox() {
-  fill(57,180,189);
+  // fill(57,180,189);
+  fill(0, 46, 102);
   rectMode(CENTER);
   rect(7*width/8, height/16, width/8, height/32);
   fill(255, 255, 255);
@@ -161,7 +169,8 @@ void setup() {
 }
 
 void draw() {
-  background(208, 208, 208);
+  // background(208, 208, 208);
+  background(255, 255, 255);
   axes();
   drawBox();
   if (bar) {

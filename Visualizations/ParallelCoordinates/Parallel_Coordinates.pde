@@ -53,7 +53,15 @@ void axes() {
     int axis_min = (int)(min(column) / 1.1);
     axes_mins[i] = axis_min;
     
-    fill(255, 255, 255);
+    fill(0, 46, 102);
+    // fill(57,180,189);
+    rectMode(CENTER);
+    rect(width/8+part*width*3/4, 7*height/8 + 3*height/64, width/32, height/32);
+    rect(width/8+part*width*3/4 - width/64, 7*height/8 + 3*height/32, width/40, height/32);
+    rect(width/8+part*width*3/4 + width/64, 7*height/8 + 3*height/32, width/40, height/32);
+
+    // fill(255, 255, 255);
+    // fill(0, 0, 0);
     textSize(width/70);
     textAlign(CENTER, BOTTOM);
     if (!flips[i]) {  text(axis_max, width/8+part*width*3/4, height/8);  }
@@ -62,12 +70,7 @@ void axes() {
     textAlign(CENTER, TOP);
     if (!flips[i]) {  text(axis_min, width/8+part*width*3/4, 7*height/8);  }
     else {  text(axis_max, width/8+part*width*3/4, 7*height/8);  }
-    
-    fill(57,180,189);
-    rectMode(CENTER);
-    rect(width/8+part*width*3/4, 7*height/8 + 3*height/64, width/32, height/32);
-    rect(width/8+part*width*3/4 - width/64, 7*height/8 + 3*height/32, width/40, height/32);
-    rect(width/8+part*width*3/4 + width/64, 7*height/8 + 3*height/32, width/40, height/32);
+
     fill(255, 255, 255);
     textAlign(CENTER, CENTER);
     text("Flip", width/8+part*width*3/4, 7*height/8 + 3*height/64);
@@ -82,6 +85,7 @@ void draw_lines() {
     stroke(row_color[j][0], row_color[j][1], row_color[j][2]);
     if (line_hover[j]) {
       stroke(57,180,189);
+      // stroke(0, 46, 102);
     }
     for (int i = 0; i < values[j].length-1; ++i) {
       int cur_value = values[j][i];
@@ -159,14 +163,14 @@ void setup() {
   }
   row_color = new int[values.length][3];
   for (int j = 0; j < row_color.length; ++j) {
-    row_color[j][0] = 255;
-    row_color[j][1] = 255;
-    row_color[j][2] = 255;
+    // row_color[j] = [255, 255, 255]
+    row_color[j] = [208, 208, 208]
   }
 }
 
 void draw() {
-  background(208, 208, 208);
+  // background(208, 208, 208);
+  background(255, 255, 255);
   axes();
   draw_lines();
 }

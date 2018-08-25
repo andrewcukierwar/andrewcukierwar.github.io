@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -10,28 +8,34 @@
 
     <title>Andrew Cukierwar</title>
 
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="Visualizations/d3.v3.min.js"></script>
+    <script src="resume.js"></script>
+    <script src="Visualizations/processing.js"></script>
+
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Custom fonts for this template -->
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="vendor/devicons/css/devicons.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
-
     <!-- Custom styles for this template -->
-    <!-- <link href="css/resume.min.css" rel="stylesheet"> -->
-    <link href="css/resume.css" rel="stylesheet">
+    <link href="resume.css" rel="stylesheet">
   </head>
 
   <body id="page-top">
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">
         <span class="d-block d-lg-none">Andrew Cukierwar</span>
         <span class="d-none d-lg-block">
-          <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.jpg" alt="">
+          <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="profile.jpg" alt="">
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,13 +69,9 @@
 
       <section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
         <div class="my-auto">
-          <h1 class="mb-0">Andrew
-            <span class="text-primary">Cukierwar</span>
-          </h1>
-          <div class="subheading mb-5">7024 Forsyth Blvd · Apt 2W · St. Louis, MO 63105 · (914) 830-2786 ·
-            <a href="mailto:acukierwar@wustl.edu">acukierwar@wustl.edu</a>
-          </div>
-          <p class="mb-5">I am currently a student in my final semester of a combined bachelor’s and master’s program at Washington University in St. Louis, where I am receiving a B.S. in Computer Science with a second major in Mathematics - in the Probability and Statistics track -  and an M.S. in Computer Science with a Graduate Certificate in Data Mining and Machine Learning. I am seeking full-time employment as a data scientist, quantitative analyst, or software engineer.</p>
+          <h1 class="mb-0"> Andrew Cukierwar </h1>
+          <div class="subheading mb-5"> 7024 Forsyth Blvd · Apt 2W · St. Louis, MO 63105 · (914) 830-2786 · acukierwar@wustl.edu </div>
+          <p class="mb-5"> I am currently a student in my final semester of a combined bachelor’s and master’s program at Washington University in St. Louis, where I am receiving a B.S. in Computer Science with a second major in Mathematics - in the Probability and Statistics track -  and an M.S. in Computer Science with a Graduate Certificate in Data Mining and Machine Learning. I am seeking full-time employment as a data scientist, quantitative analyst, or software engineer. </p>
           <ul class="list-inline list-social-icons mb-0">
             <li class="list-inline-item" title="LinkedIn">
               <a href="https://www.linkedin.com/in/acukierwar/">
@@ -105,24 +105,33 @@
         <div class="my-auto">
           <h2 class="mb-4">Education</h2>
 
-          <div class="resume-item d-flex flex-column flex-md-row mb-4">
+          <div class="resume-item d-flex flex-column flex-md-row">
             <div class="resume-content mr-auto">
               <h3 class="mb-0">Washington University in St. Louis</h3>
               <div class="subheading mb-2">M.S. in Computer Science</div>
-              <div>Graduate Certificate in Data Mining & Machine Learning</div>
-              <div>GPA: 3.7/4.0</div>
-              <p></p>
-              <div class="subheading mb-2">B.S. in Computer Science</div>
-              <div>Second Major in Mathematics - Probability & Statistics Track</div>
-              <div>Cumulative GPA: 3.5/4.0</div>
-              <div>Major GPA: 3.7/4.0</div>
             </div>
             <div class="resume-date text-md-right">
               <h3 class="mb-0">St. Louis, MO</h3>
-              <span class="text-primary">Aug. 2014 - Dec. 2018</span>
-              <br><br><br><br><br>
-              <span class="text-primary">Aug. 2014 - Dec. 2018</span>
+              <span class="text-primary">Jan 2018 - Dec 2018</span>
             </div>
+          </div>
+          <div class="resume-item d-flex flex-column mb-3">
+            <div>Graduate Certificate in Data Mining & Machine Learning</div>
+            <div>GPA: 3.7/4.0</div>
+          </div>
+
+          <div class="resume-item d-flex flex-column flex-md-row">
+            <div class="resume-content mr-auto">
+              <div class="subheading mb-2">B.S. in Computer Science</div>
+            </div>
+            <div class="resume-date text-md-right">
+              <span class="text-primary">Aug 2014 - Dec 2018</span>
+            </div>
+          </div>
+          <div class="resume-item d-flex flex-column mb-4">
+            <div>Second Major in Mathematics - Probability & Statistics Track</div>
+            <div>Cumulative GPA: 3.5/4.0</div>
+            <div>Major GPA: 3.7/4.0</div>
           </div>
 
           <div class="resume-item d-flex flex-column flex-md-row">
@@ -184,7 +193,7 @@
           <div class="resume-item d-flex flex-column flex-md-row">
             <div class="resume-content mr-auto">
               <h3 class="mb-0">Washington University in St. Louis</h3>
-              <div class="subheading mb-1">Teaching Assistant - CSE 557: Information Visualization</div>
+              <div class="subheading mb-1">Teaching Assistant | CSE 557: Information Visualization</div>
             </div>
             <div class="resume-date text-md-right">
               <h3 class="mb-0">St. Louis, MO</h3>
@@ -198,7 +207,7 @@
 
           <div class="resume-item d-flex flex-column flex-md-row">
             <div class="resume-content mr-auto">
-              <div class="subheading mb-1">Teaching Assistant - CSE 131: Intro to Computer Science</div>
+              <div class="subheading mb-1">Teaching Assistant | CSE 131: Intro to Computer Science</div>
             </div>
             <div class="resume-date text-md-right">
               <span class="text-primary">Aug 2015 - Dec 2015</span>
@@ -313,6 +322,7 @@
           <div class="resume-item d-flex flex-column mb-4">
             <div>• Predicted outcomes from 2017-18 games with an accuracy of ~70% solely using prior season data.</div>
             <div>• Trained Gaussian Process Regression model with an RBF kernel using pyGPs.</div>
+            <a href="https://github.com/andrewcukierwar/Bayesian-NBA-Prediction-Model">See Project</a>
           </div>
 
           <div class="resume-item d-flex flex-column flex-md-row">
@@ -353,15 +363,13 @@
           <div class="resume-item d-flex flex-column flex-md-row mb-4">
             <div class="resume-content mr-auto">
               <h3 class="mb-0">Technical Skills</h3>
-              <div>Proficient:</div>
-              <div>• Python</div>
-              <div>• Java</div>
-              <div>• D3.js</div>
-              <div>Intermediate:</div>
-              <div>• R </div>
-              <div>• SQL</div>
-              <div>• MATLAB</div>
-              <div>• C++</div>          
+              <div><b>Python</b> - Primary programming language</div>
+              <div><b>Java</b> - First programming language, not used much the past two years</div>
+              <div><b>D3.js</b> - Designed various visualizations, two of which can be seen in the Visualizations section</div>
+              <div><b>R</b> - Used mainly in statistics classes</div>
+              <div><b>SQL</b> - Used Oracle to store and query data during internships</div>
+              <div><b>MATLAB</b> - Used to implement machine learning algorithms from scratch</div>
+              <div><b>C++</b> - Learned fundamentals in class, not much experience outside of class</div>
             </div>
           </div>
 
@@ -396,7 +404,6 @@
           <div class="resume-item d-flex flex-column flex-md-row mb-5">
             <div class="resume-content mr-auto" id="ThemeRiver">
               <h2 style="text-align:center">Theme River</h2>
-              <script src="//d3js.org/d3.v3.js"></script>
               <script src="Visualizations/ThemeRiver/themeRiver.js"></script>
             </div>
           </div>
@@ -410,18 +417,5 @@
         </div>
       </section>
     </div>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="js/resume.min.js"></script>
-
-    <script src="Visualizations/BarLineCharts/processing.js"></script>
   </body>
-
 </html>
