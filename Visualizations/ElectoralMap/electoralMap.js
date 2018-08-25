@@ -54,14 +54,13 @@ $(function() {
         var dataset = [];
         for (var i in data) {
             dataset.push({
-                state: data[i]["State or district"], 
-                method: data[i]["Eectoral Method"],
-                num_clinton: +data[i]["# Clinton"],
-                perc_clinton: +data[i]["% Clinton"],
-                votes_clinton: +data[i]["Electoral Votes Clinton"],
-                num_trump: +data[i]["# Trump"],
-                perc_trump: +data[i]["% Trump"],
-                votes_trump: +data[i]["Electoral Votes Trump"],
+                state: data[i]["State or district"],
+                numVoteD: +data[i]["# Clinton"],
+                percentD: +data[i]["% Clinton"],
+                electoralD: +data[i]["Electoral Votes Clinton"],
+                numVoteR: +data[i]["# Trump"],
+                percentR: +data[i]["% Trump"],
+                electoralR: +data[i]["Electoral Votes Trump"],
                 abbreviation: data[i]["Abbreviation"],
                 row: +data[i]["Row"],
                 col: +data[i]["Col"]
@@ -76,7 +75,7 @@ $(function() {
             .attr("width", width/12.75)
             .attr("height", height/9.1)
             .style("fill", function(d) {
-                var margin = 100*(d.perc_trump - d.perc_clinton);
+                var margin = 100*(d.percentR - d.percentD);
                 margin = Math.floor(margin / 10) * 10; // round
                 return color(margin);
             });
@@ -95,7 +94,7 @@ $(function() {
             .attr("class", "votes")
             .attr("x", function(d) { return (16/17 * width) * (1 + d.col)/12 - width/45; })
             .attr("y", function(d) { return (7/8 * height) * (1 + d.row)/8; })
-            .text(function(d) { return d.votes_clinton + d.votes_trump; })
+            .text(function(d) { return d.electoralD + d.electoralR; })
             .style("text-anchor", "middle")
             .style("font-size", "12px");
 
@@ -103,15 +102,15 @@ $(function() {
             .on("mouseover", function() { return tooltip.style("visibility", "visible"); })
             .on("mouseout", function() { return tooltip.style("visibility", "hidden"); })
             .on("mousemove", function(d){
-                var totalVotes = d.votes_clinton + d.votes_trump;
-                var trumpPerc = d3.format(".1f")(100 * d.perc_trump) + "%";
-                var hillaryPerc = d3.format(".1f")(100 * d.perc_clinton) + "%";
+                var totalVotes = d.electoralD + d.electoralR;
+                var trumpPerc = d3.format(".1f")(100 * d.percentR) + "%";
+                var hillaryPerc = d3.format(".1f")(100 * d.percentD) + "%";
                 tooltip.style("top", event.pageY + "px")
                     .style("left", event.pageX +"px")
                     .html("<b>" + d.state + "</b> <br>" +
                         "Electoral Votes: " + totalVotes + "<br>" +
-                        "- Hillary Clinton: " + d.num_clinton + "(" + hillaryPerc + ")" + "<br>" +
-                        "- Donald Trump: " + d.num_trump + "(" + trumpPerc + ")"
+                        "- Hillary Clinton: " + d.numVoteD + "(" + hillaryPerc + ")" + "<br>" +
+                        "- Donald Trump: " + d.numVoteR + "(" + trumpPerc + ")"
                     );
             });
     });
