@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ThemeRiver</title>
+  <script src="//d3js.org/d3.v3.js"></script>
+  <style>
+      body {
+          background-color: #30d5c8;
+      }
+  </style>
+</head>
+<body>
+  <svg width="825" height="375" id="svg"></svg>
+<script>
+var svg = d3.select("svg");
+var margin = {top: 20, right: 20, bottom: 40, left: 40};
+var width = +svg.attr("width") - margin.left - margin.right;
+var height = +svg.attr("height") - margin.top - margin.bottom;
+
+var g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var path = "/project/data3.csv";
+
+d3.csv(path, function(error, data) {
+    console.log(data);
+    console.log(data.columns[0]);
+    console.log(data.columns[1]);
+    if (error) throw error;
+    var name_header = data.columns[0];
+    var value_header = data.columns[1];
+
+    var dataset = [];
+    for (var j = 0; j < data.length; ++j) {
+        var cur_name = data[j][name_header];
+        var cur_value = +data[j][value_header];
+        var tempArray = {name: cur_name, value: cur_value};
+        dataset.push(tempArray);
+    }
+
+    var uniqueXs = d3.map(dataset, function(d) { return d.name; }).size();
+
+    var display = d3.select("body")
+        .append("div")
+        .attr("class", "bar_line_tooltip");
+
+    var x = d3.scaleBand()
+        .rangeRound([0, width])
+        .domain(dataset.map(function(d) { return d.name; }));
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0])
+        .domain([0, d3.max(dataset, function(d) { return d.value; })]);
+
+    var line = d3.line()
+        .x(function(d) { return (width/uniqueXs/2) + x(d.name); })
+        .y(function(d) { return y(d.value); });
+
+    g.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+      .append("text")
+        .attr("transform", "translate(" + width/2 + "," + (7/8*margin.bottom) + ")")
+        .attr("text-anchor", "middle")
+        .style("stroke", "black")
+        .text(value_header);
+
+    g.append("g")
+        .call(d3.axisLeft(y).ticks(10))
+      .append("text")
+        .attr("transform", "translate(" + (-31/40*margin.left) + "," + height/2 + ") rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("stroke", "black")
+        .text(name_header);
+
+    g.append("path")
+        .datum(dataset)
+        .attr("class", "line")
+        .attr("d", line);
+
+    g.selectAll(".circle")
+        .data(dataset)
+        .enter().append("circle")
+            .attr("class", "circle")
+            .attr("cx", function(d) { return (width/uniqueXs/2) + x(d.name); })
+            .attr("cy", function(d) { return y(d.value); })
+            .attr("r", 5)
+            .attr("width", x.bandwidth())
+            .attr("height", function(d) { return height - y(d.value); })
+            .on("mouseover", function(d, i){
+                d3.select(this).style("fill", "red");
+            })
+            .on("mousemove", function(d, i){
+                var mouseX = event.pageX;
+                var mouseY = event.pageY;
+                var cur_name = d.name;
+                var cur_value = d.value;
+                var toDisplay = "(" + cur_name + ", " + cur_value + ")";
+                display.style("top", (mouseY - 17)+"px")
+                    .style("visibility", "visible")
+                    .style("left",(mouseX)+"px")
+                    .text(toDisplay);
+            })
+            .on("mouseout", function(){
+                d3.select(this).style("fill", "white");
+                display.style("visibility", "hidden");
+            });
+});
+</script>
+
+</body>
+</html>
