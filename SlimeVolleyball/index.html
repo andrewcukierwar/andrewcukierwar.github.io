@@ -42,6 +42,22 @@ h2 {margin: 8px 0;}
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
 }
+
+#ContentDiv {
+  width: 750px;
+  height: 375px;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  /*position:relative;
+  margin:15px auto;
+  width:750px;*/
+}
 input[type='checkbox'] {
   margin-right: 1em;
 }
@@ -49,6 +65,8 @@ input[type='checkbox'] {
 <script type="text/javascript" src="Input.js"></script>
 <script type="text/javascript" src="SlimeAI.js"></script>
 <script type="text/javascript">
+
+var noPlayer = false;
 
 var physicsLog = 0;
 var TWO_PI = Math.PI*2;
@@ -73,14 +91,15 @@ function newLegacyBall(radius,color) {
       var radiusPix = this.radius * pixelsPerUnitY + 2;
 
       if(ballImage && !legacyGraphics) {
-	this.rotation += this.velocityX / 100;
-	this.rotation = this.rotation % TWO_PI;
+        this.rotation += this.velocityX / 100;
+        this.rotation = this.rotation % TWO_PI;
 
-	ctx.translate(xPix, yPix);
+        ctx.translate(xPix, yPix);
         ctx.rotate(this.rotation);
         ctx.drawImage(ballImage, -radiusPix, -radiusPix);
-	ctx.setTransform(1,0,0,1,0,0);
-      } else {
+        ctx.setTransform(1,0,0,1,0,0);
+      }
+      else {
         ctx.fillStyle = legacyBallColor;
         ctx.beginPath();
         ctx.arc(xPix, yPix, radiusPix, 0, TWO_PI);
@@ -89,10 +108,11 @@ function newLegacyBall(radius,color) {
     }
   };
 }
-function newLegacySlime(onLeft,radius,color) {
+function newLegacySlime(onLeft,radius,speed,color) {
   return {
     onLeft:onLeft,
     radius:radius,
+    speed:speed,
     color:color,
     img:null,
     x:0,
@@ -106,7 +126,8 @@ function newLegacySlime(onLeft,radius,color) {
 
       if(this.img && !legacyGraphics) {
         ctx.drawImage(this.img, xPix - radiusPix, yPix - 38);
-      } else {
+      }
+      else {
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(xPix, yPix, radiusPix, Math.PI, TWO_PI);
@@ -184,6 +205,7 @@ var GAME_STATE_SHOW_WINNER = 5;
   var slimeLeftScore;
   var slimeRightScore;
   var slimeAI;
+  var slimeAILeft;
   var updateCount; // RESET every time GAME_STATE_RUNNING is set
   var leftWon;
   // GAME CHEAT DATA
@@ -198,14 +220,17 @@ var GAME_STATE_SHOW_WINNER = 5;
   }
 
   // Game Update Functions
-  function updateSlimeVelocities(s,movement,jump) {
+  function updateSlimeVelocities(s,movement,jump,speed) {
     if(movement == 0) {
       s.velocityX = 0;
-    } else if(movement == 1) {
-      s.velocityX = -8;
-    } else if(movement == 2) {
-      s.velocityX = 8;
-    } else {
+    }
+    else if(movement == 1) {
+      s.velocityX = -8 * speed;
+    }
+    else if(movement == 2) {
+      s.velocityX = 8 * speed;
+    }
+    else {
       throw "slime movement " + movement + " is invalid";
     }
     if(jump && s.y == 0) {
@@ -369,20 +394,31 @@ var GAME_STATE_SHOW_WINNER = 5;
     return false;
   }
   function updateFrame() {
-    if(onePlayer) {
+    if(noPlayer) {
+      slimeAILeft.move(false); // Move the left slime
+      slimeAI.move(false); // Move the right slime
+      speedLeft = slimeAILeft.name == "Psycho Slime" ? 2 : 1;
+      speed = slimeAI.name == "Psycho Slime" ? 2 : 1;
+      updateSlimeVelocities(slimeLeft,slimeAILeft.movement,slimeAILeft.jumpSet,speedLeft);
+      updateSlimeVelocities(slimeRight,slimeAI.movement,slimeAI.jumpSet,speed);
+    }
+    else if(onePlayer) {
       slimeAI.move(false); // Move the right slime
       updateSlimeVelocitiesWithDoubleKeys(slimeLeft,
         KEY_A,KEY_LEFT,
         KEY_D,KEY_RIGHT,
         KEY_W,KEY_UP);
-      updateSlimeVelocities(slimeRight,slimeAI.movement,slimeAI.jumpSet);
-    } else {
+      // speed = slimeAI.name == "Psycho Slime" ? 2 : 1;
+      updateSlimeVelocities(slimeRight,slimeAI.movement,slimeAI.jumpSet,slimeRight.speed);
+    }
+    else {
       updateSlimeVelocitiesWithKeys(slimeLeft, KEY_A,KEY_D,KEY_W);
       updateSlimeVelocitiesWithKeys(slimeRight, KEY_LEFT,KEY_RIGHT,KEY_UP);
     }
 
-    updateSlime(slimeLeft, 50 , 445);
-    updateSlime(slimeRight, 555, 950);
+    updateSlime(slimeLeft, slimeLeft.radius/2 , 495 - slimeLeft.radius/2);
+    //updateSlime(slimeRight, 555, 950);
+    updateSlime(slimeRight, 505 + slimeRight.radius/2, 1000 - slimeRight.radius/2);
 
     // Allows slimes to go accross the net
     //updateSlime(slimeLeft, 0, 1000);
@@ -415,13 +451,13 @@ var GAME_STATE_SHOW_WINNER = 5;
   }
 
   // Rendering Functions
-  function renderBackground()
-  {
+  function renderBackground() {
     if(legacyGraphics) {
       ctx.fillStyle=legacySkyColor;
       ctx.fillRect(0, 0, viewWidth, courtYPix);
       ctx.fillStyle = legacyGroundColor;
-    } else {
+    }
+    else {
       ctx.drawImage(backImage, 0, 0);
       ctx.fillStyle = newGroundColor;
     }
@@ -438,7 +474,8 @@ var GAME_STATE_SHOW_WINNER = 5;
   function renderGame() {
     if(updatesToPaint == 0) {
       console.log("ERROR: render called but not ready to paint");
-    } else {
+    }
+    else {
       if(updatesToPaint > 1) {
         console.log("WARNING: render missed " + (updatesToPaint - 1) + " frame(s)");
       }
@@ -497,7 +534,8 @@ var GAME_STATE_SHOW_WINNER = 5;
       if(onePlayer && nextSlimeIndex >= slimeAIs.length) {
         nextSlimeIndex = 0;
         toInitialMenu();
-      } else {
+      }
+      else {
         start(onePlayer);
       }
     }
@@ -517,26 +555,29 @@ var GAME_STATE_SHOW_WINNER = 5;
     clearInterval(gameIntervalObject);
     if(onePlayer) {
       if(leftWon) {
-	nextSlimeIndex++;
-	if(nextSlimeIndex >= slimeAIs.length) {
+        nextSlimeIndex++;
+        if(nextSlimeIndex >= slimeAIs.length) {
           menuDiv.innerHTML = '<div style="text-align:center;">' +
             '<h1 style="margin:50px 0 20px 0;">You beat everyone!</h1>' +
             "Press 'space' to do it all over again!" +
             '</div>';
-	} else {
+        }
+        else {
           menuDiv.innerHTML = '<div style="text-align:center;">' +
             '<h1 style="margin:50px 0 20px 0;">You won!</h1>' +
             "Press 'space' to continue..." +
             '</div>';
-	}
-      } else {
-	nextSlimeIndex = 0;
+        }
+      }
+      else {
+        nextSlimeIndex = 0;
         menuDiv.innerHTML = '<div style="text-align:center;">' +
           '<h1 style="margin:50px 0 20px 0;">You lost :(</h1>' +
           "Press 'space' to retry..." +
           '</div>';
       }
-    } else {
+    }
+    else {
       menuDiv.innerHTML = '<div style="text-align:center;">' +
         '<h1 style="margin:50px 0 20px 0;">Player ' + (leftWon ? '1' : '2') + ' Wins!</h1>' +
         "Press 'space' for rematch..." +
@@ -552,6 +593,12 @@ var GAME_STATE_SHOW_WINNER = 5;
     gameState = GAME_STATE_RUNNING;
   }
   function endPoint() {
+    if(slimeAILeft) {
+      keysDown[KEY_UP] = false;
+      keysDown[KEY_RIGHT] = false;
+      keysDown[KEY_LEFT] = false;
+    }
+
     if(slimeAI) {
       keysDown[KEY_UP] = false;
       keysDown[KEY_RIGHT] = false;
@@ -570,10 +617,14 @@ var GAME_STATE_SHOW_WINNER = 5;
     if(onePlayer) {
       if(leftWon) {
         endOfPointText = 'Nice, you got the point!';
-      } else {
-        endOfPointText = slimeAI.name + ' scores!';
+        console.log("POINT LEFT");
       }
-    } else {
+      else {
+        endOfPointText = slimeAI.name + ' scores!';
+        console.log("POINT RIGHT");
+      }
+    }
+    else {
       endOfPointText = 'Player ' + (leftWon ? '1':'2') + ' scores!';
     }
     gameState = GAME_STATE_POINT_PAUSE;
@@ -658,9 +709,9 @@ var GAME_STATE_SHOW_WINNER = 5;
 
     // Initialize Game Data
     nextSlimeIndex = 0;
-    ball       = newLegacyBall(  25,'#ff0');
-    slimeLeft  = newLegacySlime(true,100,'#0f0');
-    slimeRight = newLegacySlime(false,100,'#f00');
+    ball       = newLegacyBall(25,'#ff0');
+    slimeLeft  = newLegacySlime(true,100,1,'#0f0');
+    slimeRight = newLegacySlime(false,100,1,'#f00');
 
     var localSkyImage = new Image();
     localSkyImage.src = 'sky2.jpg';
@@ -681,6 +732,11 @@ var GAME_STATE_SHOW_WINNER = 5;
     beachImage.src = 'beach.jpg';
     beachImage.onload = function() {
       backImages['beach'] = this;
+    }
+    var hellImage = new Image();
+    hellImage.src = 'hell.jpg';
+    hellImage.onload = function() {
+      backImages['hell'] = this;
     }
     var localBallImage = new Image();
     localBallImage.src = 'vball.png';
@@ -713,9 +769,20 @@ var GAME_STATE_SHOW_WINNER = 5;
     slimeLeftScore = 0;
     slimeRightScore = 0;
 
-    slimeLeft.img = greenSlimeImage;
-    if(onePlayer) {
+    slimeLeft.color = '#6600CC';
+    slimeLeft.img = null;
+    // slimeLeft.img = greenSlimeImage;
+
+    if(noPlayer) {
+      var slimeAILeftProps = slimeAIs[4];
+      slimeLeft.radius = slimeAILeftProps.radius;
+      slimeAILeft          = newSlimeAI(true,slimeAILeftProps.name);
+      slimeAILeftProps.initAI(slimeAILeft);
+
+      console.log(slimeAILeft);
+
       var slimeAIProps = slimeAIs[nextSlimeIndex];
+      slimeRight.radius = slimeAIProps.radius;
       slimeRight.color = slimeAIProps.color;
       legacySkyColor   = slimeAIProps.legacySkyColor;
       backImage        = backImages[slimeAIProps.backImageName];
@@ -727,7 +794,24 @@ var GAME_STATE_SHOW_WINNER = 5;
       slimeRight.img   = null;
       slimeAI          = newSlimeAI(false,slimeAIProps.name);
       slimeAIProps.initAI(slimeAI);
-    } 
+    }
+
+    else if(onePlayer) {
+      var slimeAIProps = slimeAIs[nextSlimeIndex];
+      slimeRight.speed = slimeAIProps.speed;
+      slimeRight.radius = slimeAIProps.radius;
+      slimeRight.color = slimeAIProps.color;
+      legacySkyColor   = slimeAIProps.legacySkyColor;
+      backImage        = backImages[slimeAIProps.backImageName];
+      backTextColor    = slimeAIProps.backTextColor;
+      legacyGroundColor= slimeAIProps.legacyGroundColor;
+      legacyBallColor  = slimeAIProps.legacyBallColor;
+      newGroundColor   = slimeAIProps.newGroundColor;
+
+      slimeRight.img   = null;
+      slimeAI          = newSlimeAI(false,slimeAIProps.name);
+      slimeAIProps.initAI(slimeAI);
+    }
     else {
       legacySkyColor   = '#00f';
       backImage        = backImages['beach'];
@@ -737,7 +821,10 @@ var GAME_STATE_SHOW_WINNER = 5;
       newGroundColor   = '#A1A1A1';
 
       slimeRight.color = '#90C3D4';
-      slimeRight.img   = redSlimeImage;
+      slimeRight.img   = null;
+      slimeRight.radius = 100;
+      slimeRight.speed = 1;
+      // slimeRight.img   = redSlimeImage;
       slimeAI          = null;
     }
 
@@ -758,7 +845,8 @@ var GAME_STATE_SHOW_WINNER = 5;
       '<span onclick="start(true)" class="btn" style="display:inline-block;margin:20px 30px 20px 30px;font-size:40px;">One Player</span>' +
       '<span onclick="start(false)" class="btn" style="display:inline-block;margin:20px 30px 20px 30px;font-size:40px;">Two Player</span>' +
       '<p>Originally written by Quin Pendragon and Daniel Wedge (http://oneslime.net)<br/>' +
-      'Rewritten by Jonathan Marler</p>'
+      'Rewritten by Jonathan Marler<br/>' +
+      'Modified by Andrew Cukierwar</p>'
       '</div>';
   }
   function loadOptions() {
@@ -794,7 +882,7 @@ var GAME_STATE_SHOW_WINNER = 5;
 </script>
 </head><body onload="bodyload()" style="text-align:center;">
 
-<div id="ContentDiv" style="position:relative;margin:15px auto;width:750px;">
+<div id="ContentDiv">
   <div id="GameContentDiv"></div>
   <div id="OptionsDiv" style="position:relative;width:400px;height:360px;margin:0 auto;background:#eee;display:none;border:3px solid #ca6;">
     <h2>Options</h2><hr/><br/>

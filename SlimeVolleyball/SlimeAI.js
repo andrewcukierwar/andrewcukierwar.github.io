@@ -38,8 +38,8 @@ function newSlimeAI(onLeft,name) {
         this.enemyToTheirWall  = gameWidth - slimeRight.x;
       	this.ballToEnemyWall   = gameWidth - ball.x;
       	this.ballVXToEnemyWall = -ball.velocityX;
-      	moveLogic(slimeLeft,slimeRight);
-      } 
+      	this.moveLogic(slimeLeft,slimeRight);
+      }
       else {
         this.meToEnemyWall     = slimeRight.x;
         this.enemyToTheirWall  = slimeLeft.x;
@@ -55,15 +55,12 @@ function newSlimeAI(onLeft,name) {
       this.movement = 0;
     },
     moveToNet : function() {
-      //console.log('moveToNet');
       this.movement = 1;
     },
     moveToWall : function() {
-      //console.log('moveToWall');
       this.movement = 2;
     },
     jump : function() {
-      //console.log('jump');
       this.jumpSet = true;
     },
     calculateXWhenBallBelow : function(yLimit) {
@@ -378,22 +375,24 @@ function setMasterSlime(ai) {
       toEnemyWall += velocityToEnemyWall;
       if(toEnemyWall <= 0) {
         toEnemyWall = 0;
-	velocityToEnemyWall = - velocityToEnemyWall;
-      } else if(toEnemyWall >= 1000) {
+        velocityToEnemyWall = - velocityToEnemyWall;
+      }
+      else if(toEnemyWall >= 1000) {
         toEnemyWall = 1000;
-	velocityToEnemyWall = - velocityToEnemyWall;
+        velocityToEnemyWall = - velocityToEnemyWall;
       }
     }
   }
   ai.performServe = function(me) {
     if(this.state == -1) {
+      this.stopMovement(); // added to prevent bug on serve
       if(Math.random() < 0.3) {
         if(this.enemyToTheirWall < 30) {
       	  this.state = 0;
       	} 
         else if(this.enemyToTheirWall > 200) {
       	  this.state = 1;
-      	} 
+      	}
         else {
       	  this.state = 2;
       	}
@@ -423,7 +422,7 @@ function setMasterSlime(ai) {
       if(this.ballToEnemyWall < 700) {
         this.state = -1;
       }
-    } 
+    }
     else if(this.state == 2) {
       var limit = 770;
       if (ball.velocityY > 12 && this.meToEnemyWall > limit) {
@@ -562,11 +561,6 @@ function setMasterSlime(ai) {
 function setTestSlime(ai) {
   ai.state = -1;
 
-  ai.randomJump40Percent = function() {
-    if (Math.random() <= 0.05) {
-      this.jump();
-    }
-  };
   ai.ballXWhenBelow = function(yLimit) {
     var toEnemyWall         = this.ballToEnemyWall;
     var velocityToEnemyWall = .5*this.ballVXToEnemyWall;
@@ -590,6 +584,7 @@ function setTestSlime(ai) {
   }
   ai.performServe = function(me) {
     if(this.state == -1) {
+      this.stopMovement(); // added to prevent bug on serve
       if(Math.random() < 0.3) {
         if(this.enemyToTheirWall < 30) {
           this.state = 0;
@@ -772,8 +767,9 @@ var slimeAIs = [
     legacyBallColor:'#ff0',
     newGroundColor:'#ca6',
     backTextColor:'#000',
-   //initAI:setMasterSlime},
-    initAI:setPatheticWhiteSlime
+    initAI:setPatheticWhiteSlime,
+    radius:100,
+    speed:1
   },
   {
     name:"Angry Red Slime",
@@ -784,7 +780,9 @@ var slimeAIs = [
     legacyBallColor:'#88f',
     newGroundColor:'#444',
     backTextColor:'#fff',
-    initAI:setAngryRedSlime
+    initAI:setAngryRedSlime,
+    radius:100,
+    speed:1
   },
   {
     name:"Slime Master",
@@ -795,10 +793,12 @@ var slimeAIs = [
     legacyBallColor:'#fff',
     newGroundColor:'#655040',
     backTextColor:'#fff',
-    initAI:setMasterSlime
+    initAI:setMasterSlime,
+    radius:100,
+    speed:1
   },
   {
-    name:"Test Slime",
+    name:"Psycho Slime",
     color:'#90C3D4',
     backImageName:'beach',
     legacySkyColor:'#623939',
@@ -806,6 +806,21 @@ var slimeAIs = [
     legacyBallColor:'#fff',
     newGroundColor:'#A1A1A1',
     backTextColor:'#fff',
-    initAI:setTestSlime
+    initAI:setMasterSlime,
+    radius:100,
+    speed:2
+  },
+  {
+    name:"Slime Satan",
+    color:'#000',
+    backImageName:'hell',
+    legacySkyColor:'#623939',
+    legacyGroundColor:'#00a800',
+    legacyBallColor:'#fff',
+    newGroundColor:'#444',
+    backTextColor:'#fff',
+    initAI:setMasterSlime,
+    radius:150,
+    speed:1
   }
 ];
