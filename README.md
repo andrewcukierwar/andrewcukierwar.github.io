@@ -11,7 +11,7 @@ It's a plain static site built with Bootstrap 4 and jQuery, served by GitHub Pag
 | `index.html` | Main page: about, projects, experience, education, skills and earlier work |
 | `visualizations.html` | Legacy D3.js and Processing visualizations (older academic work) |
 | `resume.css`, `resume.js` | Site styles, smooth scrolling and scrollspy |
-| `resume.pdf`, `profile.jpg` | Resume linked from the site, and the sidebar photo |
+| `profile.jpg` | Sidebar photo |
 | `vendor/` | Bootstrap, jQuery, jQuery Easing and Font Awesome |
 | `Visualizations/` | Source and data for the legacy visualizations |
 | `project/`, `SlimeVolleyball/`, `games/` | Older standalone projects, kept for reference and not linked from the main page |
