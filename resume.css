@@ -1,7 +1,7 @@
 body {
     font-family: 'Open Sans', serif;
     padding-top: 54px;
-    color: #868e96;
+    color: #6c757d;
     /*color: #343a40;*/
 }
 
@@ -150,3 +150,127 @@ canvas{
     margin-bottom: auto;
     display: block;
 }
+
+a {
+    color: #002E66;
+}
+
+.btn-primary {
+    background-color: #002E66;
+    border-color: #002E66;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: #001F45 !important;
+    border-color: #001F45 !important;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    color: #002E66;
+    border-color: #002E66;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+    background-color: #002E66 !important;
+    border-color: #002E66 !important;
+    color: #fff;
+}
+
+.skip-link:focus {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2000;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    color: #002E66;
+}
+
+.lead-text {
+    max-width: 48rem;
+    font-size: 1.1rem;
+}
+
+/* Projects */
+.project-card {
+    max-width: 56rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-left: 4px solid #002E66;
+    border-radius: 0.25rem;
+}
+
+.project-card h3 {
+    font-size: 2rem;
+}
+
+.project-date {
+    white-space: nowrap;
+}
+
+.project-links .btn {
+    margin: 0.25rem 0.5rem 0.25rem 0;
+}
+
+.resume-bullets {
+    padding-left: 1.25rem;
+}
+
+.resume-bullets li {
+    margin-bottom: 0.25rem;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+.tag {
+    margin: 0 0.5rem 0.5rem 0;
+    padding: 0.2rem 0.75rem;
+    border-radius: 1rem;
+    background-color: #E8EEF6;
+    color: #002E66;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Skills and earlier work */
+.skill-group {
+    margin-bottom: 1.5rem;
+}
+
+.earlier-list {
+    list-style: none;
+    max-width: 48rem;
+    padding: 0;
+}
+
+.earlier-list li {
+    margin-bottom: 1.75rem;
+}
+
+.earlier-list h3 {
+    font-size: 1.5rem;
+}
+
+/* Legacy visualizations page */
+.viz-title {
+    font-size: 4rem;
+    line-height: 4rem;
+}
+
+.viz-heading {
+    font-size: 2rem;
+}
+
+.viz-frame {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
